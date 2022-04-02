@@ -2,7 +2,7 @@ const Router = require('express');
 const router = Router();
 const dataOp = require('../data/dataOp');
 //middleware para validar rutas y permisos
-const {validate_session,validate_premium} = require('../middleware/validations');
+const {validate_session,validate_premium,alive} = require('../middleware/validations');
 
 
 
@@ -14,7 +14,10 @@ const {validate_session,validate_premium} = require('../middleware/validations')
 
 router.get('/',validate_session,validate_premium, (req, res) => {
     //console.log(req.body.data);
-    res.send("Modulo de Cliente");
+    const jwt_result = alive();
+    console.log(jwt_result);
+    
+    res.send("Modulo de Cliente prueba" + jwt_result);
 });
 
 router.patch('/membership',validate_session,async (req,res) => {
@@ -105,9 +108,9 @@ router.get('/reports/person/higher/',validate_session,async (req,res) => {
     if(edad == undefined){
         res.send(dataOp.getResponse(400,"Error al retornar el reporte",[]));
     }
-    console.log(req.query);
+    //console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getPersonsHigher(edad);
     res.send(result);
 });
 
@@ -120,7 +123,7 @@ router.get('/reports/person/lower/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getPersonsLower(edad);
     res.send(result);
 });
 
@@ -133,7 +136,7 @@ router.get('/reports/competition/team/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getCompetitionTeams(competicion);
     res.send(result);
 });
 
@@ -146,7 +149,7 @@ router.get('/reports/country/team/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getCountryTeams(pais);
     res.send(result);
 });
 
@@ -159,7 +162,7 @@ router.get('/reports/country/stadium/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getCountryStadiums(pais);
     res.send(result);
 });
 
@@ -171,7 +174,20 @@ router.get('/reports/stadium/capacity/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getStadiumsByCapacity(capacidad);
+    res.send(result);
+});
+
+
+//## Equipos segun antiguedad
+router.get('/reports/team/age/',validate_session,async (req,res) => {
+    const {edad} = req.query;
+    if(edad == undefined){
+        res.send(dataOp.getResponse(400,"Error al retornar el reporte",[]));
+    }
+    console.log(req.query);
+
+    const result = await dataOp.getTeamsByAge(edad);
     res.send(result);
 });
 
@@ -185,7 +201,7 @@ router.get('/reports/team/game/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getTeamHistory(equipo);
     res.send(result);
 });
 
@@ -197,7 +213,7 @@ router.get('/reports/team/person/',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getHistoryPTeams(persona);
     res.send(result);
 });
 
@@ -209,20 +225,19 @@ router.get('/reports/game/goal/',validate_session,async (req,res) => {
         res.send(dataOp.getResponse(400,"Error al retornar el reporte",[]));
     }
     console.log(req.query);
-
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getGamesWithGoals(goals);
     res.send(result);
 });
 
 //## Jugadores con más X incidencias en Y competición, (de Z año)
 router.get('/reports/person/competition/incidents/',validate_session,async (req,res) => {
-    const {competicion,incidente,anio} = req.query;
-    if(competicion == undefined || incidente == undefined || anio == undefined){
+    const {competicion,anio} = req.query;
+    if(competicion == undefined || anio == undefined){
         res.send(dataOp.getResponse(400,"Error al retornar el reporte",[]));
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getIncidentsCompetitionYear(competicion,anio);
     res.send(result);
 });
 
@@ -235,7 +250,7 @@ router.get('/reports/team/competitions',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getTotalCompetitionsWinning(equipo);
     res.send(result);
 });
 
@@ -247,7 +262,7 @@ router.get('/reports/games/year',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getGamesByYear(anio);
     res.send(result);
 });
 
@@ -261,7 +276,7 @@ router.get('/reports/games/teams',validate_session,async (req,res) => {
     }
     console.log(req.query);
 
-    const result = dataOp.getResponse(200,"Estado de la quiniela actualizado",[]);
+    const result = await dataOp.getBetweenXY(local,visitante);
     res.send(result);
 });
 //-----------------------------------------------------
