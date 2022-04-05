@@ -147,7 +147,7 @@ async function UpdateUser(req, res, next){
 async function deleteUser(req, res, next){
     try {
         const id_user = req.body.id_user;
-        let resultado = await UserModal.updateStateJugador(id_user, state);
+        let resultado = await UserModal.deleteUser(id_user);
         if(resultado){
             res.status(200).json({msg:"elimando correctamente"});
         }else{
@@ -205,7 +205,7 @@ async function loginUser(req, res, next){
                 email:resultado["email"]
             };
 
-            axios.post('http://localhost:5001'+'/esb/jwt/register', payload).then(function (x) {
+            axios.post('http://jwt:5001'+'/esb/jwt/register', payload).then(function (x) {
                 if(x.data.token !== undefined && resultado[0] !== undefined){
                     console.log(x.data.token);
                     resultado[0].token = x.data.token;
@@ -238,7 +238,7 @@ function formatDate(date) {
     if (day.length < 2)
         day = '0' + day;
 
-    return [month, day, year].join('/');
+    return [year, month, day].join('-');
 }
 
 async function enviarCorreo(correo, texto){

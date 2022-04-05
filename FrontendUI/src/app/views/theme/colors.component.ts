@@ -41,11 +41,17 @@ export class ColorsComponent {
   select: FormGroup;
 
   ngOnInit(): void {
+    const rol = localStorage.getItem("rol");
+    // @ts-ignore
+    if (rol != 1) {
+      this.router.navigate(['/404']);
+    }
     this.getSelects();
     this.select = this.fb.group({
       selectstand: [null],
       selectteam: [null],
       selectcountry: [null],
+      selectstatus: [null],
     });
   }
 
@@ -104,12 +110,14 @@ export class ColorsComponent {
   id_country = 0;
   id_stand = 0;
   id_team = 0;
+  status:string='';
 
   getSelectedOptions() {
     //console.log(this.selectedstand.value.selectedstand);
     this.id_stand = this.select.value.selectstand;
     this.id_team = this.select.value.selectteam;
     this.id_country = this.select.value.selectcountry;
+    this.status = this.select.value.selectstatus;
     //console.log(this.id_country,this.id_stand,this.id_team);
   }
 
@@ -144,7 +152,7 @@ export class ColorsComponent {
             birthday,
             this.id_country,
             this.id_stand,
-            status,
+            this.status,
             this.id_team,
             photo,
             1
@@ -164,7 +172,7 @@ export class ColorsComponent {
                     toast.addEventListener('mouseleave', Swal.resumeTimer);
                   },
                 });
-
+                this.servicio.insertLog('Create Person: '+ name + ' ' + lastname);
                 Toast.fire({
                   icon: 'success',
                   title: 'Person created successfully ' + name + ' ' + lastname,

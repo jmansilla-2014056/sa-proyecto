@@ -10,6 +10,11 @@ export class TypographyComponent {
   constructor(private router: Router, private servicio: RequestService) {}
 
   ngOnInit(): void {
+    const rol = localStorage.getItem("rol");
+    // @ts-ignore
+    if (rol != 1) {
+      this.router.navigate(['/404']);
+    }
     this.getPersonAll();
   }
 
@@ -42,7 +47,7 @@ export class TypographyComponent {
                   toast.addEventListener('mouseleave', Swal.resumeTimer);
                 },
               });
-
+              this.servicio.insertLog('Delete Person: '+ name + ' ' + lastname);
               Toast.fire({
                 icon: 'success',
                 title: 'Person deleted successfully ' + name + ' ' + lastname,
