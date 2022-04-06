@@ -14,8 +14,36 @@ export class WidgetsBrandComponent  {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,private router: Router, private servicio: RequestService
   ) {}
-
   user:any;
+  ngOnInit(): void {
+    const rol = localStorage.getItem("rol");
+    // @ts-ignore
+    if (rol != 1) {
+      this.router.navigate(['/404']);
+    }
+    this.getPersonAll();
+  }
+
+  getPersonAll() {
+    try {
+      this.servicio.getUsers().subscribe(
+        (res: any) => {
+          this.user = res.data;
+          if (this.user.length > 0) {
+            //console.log(this.user);
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } catch (e) {
+
+    }
+    //console.log(this.user);
+  }
+
+
 
   editPerson(id: number) {}
 
@@ -31,25 +59,36 @@ export class WidgetsBrandComponent  {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          this.servicio.deletePerson(id_person).subscribe(
+          this.servicio.deleteUserAdmin(id_person).subscribe(
             (res: any) => {
-              const Toast = Swal.mixin({
-                toast: true,
-                position: 'center',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer);
-                  toast.addEventListener('mouseleave', Swal.resumeTimer);
-                },
-              });
-              this.servicio.insertLog('Delete Person: '+ name + ' ' + lastname);
-              Toast.fire({
-                icon: 'success',
-                title: 'Person deleted successfully ' + name + ' ' + lastname,
-              });
-              window.location.reload();
+              //console.log(res);
+              if (res.status==200){
+                const Toast = Swal.mixin({
+                  position: 'center',
+                  toast: true,
+                  showConfirmButton: false,
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                  },
+                });
+                this.servicio.insertLog('Delete Person: '+ name + ' ' + lastname);
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Person deleted successfully ' + name + ' ' + lastname,
+                });
+                window.location.reload();
+              }else{
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Something is wrong!',
+                  icon: 'error',
+                  confirmButtonText: 'Cool',
+                });
+              }
+
             },
             (err) => {
               console.log(err);

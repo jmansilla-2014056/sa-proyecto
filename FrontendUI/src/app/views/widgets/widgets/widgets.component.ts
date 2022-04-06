@@ -5,6 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-widgets',
@@ -14,8 +15,53 @@ import Swal from "sweetalert2";
 })
 export class WidgetsComponent {
   constructor(
-    private servicio: RequestService, private storage: AngularFireStorage,private router: Router
+    private servicio: RequestService, private storage: AngularFireStorage,private router: Router,
+    private fb: FormBuilder
   ) {}
+
+  // @ts-ignore
+  select: FormGroup;
+
+  listCountrys: any;
+  id_country:number=0;
+  rol=0;
+  gender='';
+  ngOnInit(): void {
+    const rol = localStorage.getItem("rol");
+    // @ts-ignore
+    if (rol != 1) {
+      this.router.navigate(['/404']);
+    }
+    this.getSelects();
+    this.select = this.fb.group({
+      selecttype: [null],
+      selectgender: [null],
+      selectcountry: [null],
+      selectstatus: [null],
+    });
+  }
+
+  getSelects() {
+    try {
+    this.servicio.getCountrys().subscribe(
+        (res: any) => {
+          this.listCountrys = res.data;
+          if (this.listCountrys.length > 0) {
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+
+    } catch (e) {}
+  }
+
+  getSelectedOptions() {
+    this.gender = this.select.value.selectgender;
+    this.rol = this.select.value.selecttype;
+    this.id_country = this.select.value.selectcountry;
+  }
 
   // @ts-ignore
   uploadPercent: Observable<number>;
@@ -55,15 +101,15 @@ export class WidgetsComponent {
     _photo: string,
     _gender: string,
     _birth_date: string,
-    _address: string
+    _address: string,
+    type:string
   ) {
+    this.getSelectedOptions();
     try {
       if(_password !== _password2){
-
         return;
       }
       if(!this.ValidateEmail(_email)){
-
         return;
       }
       this.servicio.registrerUser(
@@ -73,13 +119,14 @@ export class WidgetsComponent {
         _email,
         _phone,
         _photo,
-        _gender,
+        this.gender,
         _birth_date,
         _address,
-        2,
-        2
+        this.id_country,
+        this.rol
       ).subscribe((res: any) => {
-          if (res.status == 200) {
+          //console.log(res)
+          if (res.msg != '') {
             const Toast = Swal.mixin({
               toast: true,
               position: 'center',
@@ -96,8 +143,9 @@ export class WidgetsComponent {
               icon: 'success',
               title: 'Person created successfully ' + _name + ' ' + _last_name,
             });
-            this.router.navigate(['/administracion/persona/ver']);
+            this.router.navigate(['/administracion/usuario/ver']);
           } else {
+            console.log(res)
             Swal.fire({
               icon: 'error',
               title: 'Something went wrong ',

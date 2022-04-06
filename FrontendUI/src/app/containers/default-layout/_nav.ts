@@ -13,7 +13,8 @@ export function nivel(){
         name: 'Adiministaracion',
         url: '/administracion',
         iconComponent: { name: 'cil-puzzle' }
-      },{
+      },
+      {
         name: 'Home',
         url: '/home',
         iconComponent: { name: 'cilHome' }
@@ -57,18 +58,18 @@ export function nivel(){
       {
         name: 'Crear',
         url: '/administracion/usuario/crear',
-        iconComponent: {name: 'cil-pencil'}
+        iconComponent: {name: 'cil-list'}
       },
       {
         name: 'Ver',
-        url: '//administracion/usuario/ver',
-        iconComponent: {name: 'cil-list'}
+        url: '/administracion/usuario/ver',
+        iconComponent: {name: 'cil-pencil'}
       }
 
 
     ];
   }
-  // usuario cliente
+  // usuario empleado
   else if( x== "2"){
     sesion = [
       {
@@ -79,6 +80,11 @@ export function nivel(){
           color: 'info',
           text: 'Bienvenido'
         }
+      },
+      {
+        name: 'Home',
+        url: '/home',
+        iconComponent: { name: 'cilHome' }
       },
       {
         name: 'Estadio',
@@ -139,6 +145,16 @@ export function nivel(){
                 iconComponent: { name: 'cil-pencil' }
               },
             ]
+      },
+      {
+        name: 'Transferencias',
+        children: [
+              {
+                name: 'Ver',
+                url: '/empleado/transferencias',
+                iconComponent: { name: 'cil-list' }
+              },
+            ]
       }
     ];
   }
@@ -157,6 +173,11 @@ export function nivel(){
         ]
       },
       {
+        name: 'Home',
+        url: '/home',
+        iconComponent: { name: 'cilHome' }
+      },
+      {
         name: 'Reportes',
         iconComponent: { name: 'cil-user' },
         children: [
@@ -172,6 +193,17 @@ export function nivel(){
           },
         ]
       },
+      {
+        name: 'Partidos',
+        iconComponent: { name: 'cil-user' },
+        children: [
+          {
+            name: 'Ver',
+            url: '/empleado/user-partidos',
+            iconComponent: { name: 'cil-settings'}
+          }
+        ]
+      }
     ];
   }
   else {
@@ -193,7 +225,7 @@ export function nivel(){
           },
           {
             name: 'Home',
-            url: '/',
+            url: '/home',
             iconComponent: { name: 'cil-home' }
           }
         ]
