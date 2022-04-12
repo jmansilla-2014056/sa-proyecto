@@ -8,7 +8,8 @@ import { iconSubset } from '../../../icons/icon-subset';
 import { DocsComponentsModule } from '../../../../components';
 import { ToastersComponent } from './toasters.component';
 import { AppToastComponent } from './toast-simple/toast.component';
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('ToastersComponent', () => {
   let component: ToastersComponent;
   let fixture: ComponentFixture<ToastersComponent>;
@@ -17,7 +18,7 @@ describe('ToastersComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ToastersComponent, AppToastComponent],
-      imports: [NoopAnimationsModule, GridModule, ToastModule, CardModule, FormModule, ButtonModule, ProgressModule, FormsModule, ReactiveFormsModule, DocsComponentsModule],
+      imports: [RouterTestingModule,HttpClientTestingModule,NoopAnimationsModule, GridModule, ToastModule, CardModule, FormModule, ButtonModule, ProgressModule, FormsModule, ReactiveFormsModule, DocsComponentsModule],
       providers: [IconSetService]
     })
       .compileComponents();

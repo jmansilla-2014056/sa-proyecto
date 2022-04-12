@@ -5,7 +5,8 @@ import { LoginComponent } from './login.component';
 import { IconModule } from '@coreui/icons-angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../icons/icon-subset';
-
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
@@ -14,7 +15,7 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ LoginComponent ],
-      imports: [FormModule, CardModule, GridModule, ButtonModule, IconModule],
+      imports: [RouterTestingModule,HttpClientTestingModule,FormModule, CardModule, GridModule, ButtonModule, IconModule],
       providers: [IconSetService]
     })
     .compileComponents();

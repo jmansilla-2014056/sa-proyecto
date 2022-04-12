@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DefaultFooterComponent } from './default-footer.component';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 describe('DefaultFooterComponent', () => {
   let component: DefaultFooterComponent;
   let fixture: ComponentFixture<DefaultFooterComponent>;

@@ -6,7 +6,7 @@ import { ChartjsModule } from '@coreui/angular-chartjs';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../icons/icon-subset';
 import { WidgetsDropdownComponent } from './widgets-dropdown.component';
-
+import { RouterModule, Routes } from '@angular/router';
 describe('WidgetsDropdownComponent', () => {
   let component: WidgetsDropdownComponent;
   let fixture: ComponentFixture<WidgetsDropdownComponent>;

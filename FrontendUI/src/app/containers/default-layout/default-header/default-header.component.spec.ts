@@ -13,7 +13,8 @@ import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../icons/icon-subset';
 import { DefaultHeaderComponent } from './default-header.component';
 import { RouterTestingModule } from '@angular/router/testing';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 describe('DefaultHeaderComponent', () => {
   let component: DefaultHeaderComponent;
   let fixture: ComponentFixture<DefaultHeaderComponent>;
@@ -22,7 +23,7 @@ describe('DefaultHeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DefaultHeaderComponent],
-      imports: [GridModule, HeaderModule, NavModule, BadgeModule, AvatarModule, DropdownModule, BreadcrumbModule, RouterTestingModule, SidebarModule],
+      imports: [HttpClientTestingModule, GridModule, HeaderModule, NavModule, BadgeModule, AvatarModule, DropdownModule, BreadcrumbModule, RouterTestingModule, SidebarModule],
       providers: [IconSetService]
     })
       .compileComponents();

@@ -6,7 +6,7 @@ import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../icons/icon-subset';
 import { NavsComponent } from './navs.component';
 import { DocsComponentsModule } from '../../../../components';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('NavsComponent', () => {
   let component: NavsComponent;
   let fixture: ComponentFixture<NavsComponent>;
@@ -15,7 +15,7 @@ describe('NavsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NavsComponent],
-      imports: [GridModule, CardModule, RouterTestingModule, NavModule, DropdownModule, DocsComponentsModule],
+      imports: [HttpClientTestingModule,GridModule, CardModule, RouterTestingModule, NavModule, DropdownModule, DocsComponentsModule],
       providers: [IconSetService]
     })
       .compileComponents();
