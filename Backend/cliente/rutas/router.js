@@ -329,7 +329,7 @@ router.get('/report/5/',validate_session,async (req,res) => {
     res.send(result);
 });
 
-//## Equipos que participaron en X competicion
+//## Equipos que participaron en X competicion -ESB
 router.get('/report/4/',validate_session,async (req,res) => {
     const {id_competition} = req.query;
     if(id_competition == undefined){
@@ -340,5 +340,18 @@ router.get('/report/4/',validate_session,async (req,res) => {
     const result = await dataOp.getCompetitionTeams_ESB(id_competition);
     res.send(result);
 });
+
+//# Obtener equipos favoritos de un usuario - ESB 
+router.get('/follow',validate_session,async (req,res) => {
+    const {id_client} = req.query;
+    if(id_client == undefined){
+        res.send(dataOp.getResponse(400,"Error al obtener los equipos que participaron en una competición.",[]));
+    }
+    console.log(req.query);
+
+    const result = await dataOp.getFollowTeams_ESB(id_client);
+    res.send(result);
+});
+
 
 module.exports = router;

@@ -456,6 +456,24 @@ function getResponse(code,message,data){
 // -------------- Cambios para ESB -----------------
 
 //  obtener equipos favoritos de un equipo 
+async function getFollowTeams_ESB(id){
+    const query = ` select e.id_team as 'id', eq.name, eq.fundation_date as 'foundation_date',
+    eq.photo,eq.id_Country as 'id_country',c.country from Equipos_Seguidos e
+       join Equipo eq on e.id_team = eq.id_team
+       join Country c on eq.id_Country = c.id_Country
+   where e.id_usuario =${id};`;
+
+    try{
+        const result = await executeQ(query); 
+        
+        return {status:200,msg:"Favoritos obtenidos con éxito.",data:result};
+        
+    }catch(error){
+        console.log(error);
+        return {status:400,msg:"Error al obtener los equipos favoritos.",data:[]};
+    }
+}
+
 
 // Equipos que participaron en x competicion
 async function getCompetitionTeams_ESB(id_competition){
@@ -557,5 +575,6 @@ module.exports = {
 
     getCompetitionTeams_ESB,
     getCountryTeams_ESB,
-    getTeamsByAge_ESB
+    getTeamsByAge_ESB,
+    getFollowTeams_ESB
 }
