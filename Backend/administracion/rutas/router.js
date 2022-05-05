@@ -2,6 +2,7 @@ const Router = require("express");
 const router = Router();
 const PersonaCtl = require("../controllers/PersonaCtl");
 const BitacoraCtl = require("../controllers/BitacoraCtl");
+const ReporteCtl= require("../controllers/ReporteCtl");
 
 router.get("/", (req, res) => {
   res.send(
@@ -28,5 +29,6 @@ router.get("/reporte/log", BitacoraCtl.findAll);
 
 //endpoint Bitacora esb
 router.get('/report/10',BitacoraCtl.findId);
+router.get('/report/9/',ReporteCtl.newsByTeam);
 
 module.exports = router;

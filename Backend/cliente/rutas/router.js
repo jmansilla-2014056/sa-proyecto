@@ -329,7 +329,7 @@ router.get('/report/5/',validate_session,async (req,res) => {
     res.send(result);
 });
 
-//## Equipos que participaron en X competicion
+//## Equipos que participaron en X competicion -ESB
 router.get('/report/4/',validate_session,async (req,res) => {
     const {id_competition} = req.query;
     if(id_competition == undefined){
