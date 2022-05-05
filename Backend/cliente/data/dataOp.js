@@ -451,6 +451,83 @@ function calcularAnios(dateString) {
 function getResponse(code,message,data){
     return JSON.stringify({status:code,msj:message,data:data});
 }
+
+
+// -------------- Cambios para ESB -----------------
+
+//  obtener equipos favoritos de un equipo 
+
+// Equipos que participaron en x competicion
+async function getCompetitionTeams_ESB(id_competition){
+    const query = ` Select id_competicion as 'id_competition', id_team,name_team  as 'team', photo
+    From(
+    SELECT c.id_competencia as 'id_competicion',
+    c.name as 'name_competicion',
+    e.photo,
+    e.id_team ,e.name as 'name_team'
+    From Competencia c 
+    Join Partido p 
+    On p.id_competicion = c.id_competencia
+    Join Equipo e 
+    On (e.id_team = p.id_team_local  || e.id_team = p.id_team_visiting)
+    Where c.id_competencia = ${id_competition}) t
+    Group By id_competicion,name_competicion, id_team,name_team,photo ;`;
+
+    try{
+        const result = await executeQ(query); 
+        
+        return {status:200,msj:"Equipos que participaron en una competición obtenidos con éxito.",data:result};
+        
+    }catch(error){
+        console.log(error);
+        return {status:400,msj:"Error al obtener los equipos que participaron en una competición.",data:[]};
+    }
+}
+
+// Equipos x país 
+async function getCountryTeams_ESB(id_country){
+    const query = `Select e.id_team,e.name as 'team', e.photo as 'photo',
+    c.id_Country as 'id_country' 
+    From Equipo e
+    Join Country c 
+    On e.id_Country = c.id_Country 
+    Where e.id_Country = ${id_country};`;
+
+    try{
+        const result = await executeQ(query); 
+        
+        return {status:200,msg:"Equipos de un país obtenidos con éxito.",data:result};
+        
+    }catch(error){
+        console.log(error);
+        return {status:400,msg:"Error al obtener los equipos de un país.",data:[]};
+    }
+}
+
+// Equipos con x años de antiguedad
+async function getTeamsByAge_ESB(age){
+    const query = ` Select e.id_team, e.team, e.photo, e.foundation_date, e.country
+    From(
+    SELECT id_team, name as 'team', photo, fundation_date as 'foundation_date', c.country as 'country',
+    TIMESTAMPDIFF(YEAR,fundation_date ,CURDATE()) AS age
+    FROM Equipo eq
+    Join Country c 
+    On eq.id_Country = c.id_Country 
+    ) as e
+    Where e.age  = ${age};`;
+
+    try{
+        const result = await executeQ(query); 
+        
+        return {status:200,msg:"Equipos con x años de antigüedad obtenidos con éxito.",data:result};
+        
+    }catch(error){
+        console.log(error);
+        return {status:400,msg:"Error al obtener los equipos con x años de antigüedad.",data:[]};
+    }
+}
+
+
 module.exports = {
     getCountries,
     obtainMembership,
@@ -476,5 +553,9 @@ module.exports = {
     encryptPassword,
     urlEncoded,
     urlDecoded,
-    calcularAnios
+    calcularAnios,
+
+    getCompetitionTeams_ESB,
+    getCountryTeams_ESB,
+    getTeamsByAge_ESB
 }

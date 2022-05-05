@@ -305,4 +305,40 @@ router.get('/countries',validate_session,async (req,res) => {
     res.send({'countries':countries});
 });
 
+//## Equipos segun antiguedad - ESB 
+router.get('/report/6/',validate_session,async (req,res) => {
+    const {age} = req.query;
+    if(age == undefined){
+        res.send(dataOp.getResponse(400,"Error al obtener los equipos con x años de antigüedad.",[]));
+    }
+    console.log(req.query);
+
+    const result = await dataOp.getTeamsByAge_ESB(age);
+    res.send(result);
+});
+
+//## Equipos de X País - ESB
+router.get('/report/5/',validate_session,async (req,res) => {
+    const {id_country} = req.query;
+    if(id_country == undefined){
+        res.send(dataOp.getResponse(400,"Error al obtener los equipos de un país.",[]));
+    }
+    console.log(req.query);
+
+    const result = await dataOp.getCountryTeams_ESB(id_country);
+    res.send(result);
+});
+
+//## Equipos que participaron en X competicion
+router.get('/report/4/',validate_session,async (req,res) => {
+    const {id_competition} = req.query;
+    if(id_competition == undefined){
+        res.send(dataOp.getResponse(400,"Error al obtener los equipos que participaron en una competición.",[]));
+    }
+    console.log(req.query);
+
+    const result = await dataOp.getCompetitionTeams_ESB(id_competition);
+    res.send(result);
+});
+
 module.exports = router;
